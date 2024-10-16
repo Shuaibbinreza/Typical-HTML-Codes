@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zoomable Image with Buttons</title>
+    <style>
+        /* Fixed canvas for the image */
+        .canvas-container {
+            width: 500px;
+            height: 400px;
+            overflow: hidden;
+            position: relative;
+            border: 2px solid #ccc;
+            margin-top: 20px;
+        }
+
+        /* Image styles */
+        #document_canvas {
+            width: 100%;
+            height: auto;
+            transition: transform 0.2s ease;
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+
+        /* Zoom buttons */
+        .zoom-controls {
+            margin-top: 20px;
+        }
+
+        .zoom-controls button {
+            padding: 10px;
+            font-size: 16px;
+            margin-right: 10px;
+        }
+
+        /* Positioning zoom buttons inside the canvas */
+        .zoom-buttons {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            z-index: 10;
+        }
+
+        .zoom-buttons button {
+            padding: 5px 10px;
+            font-size: 14px;
+            margin: 0 5px;
+        }
+    </style>
+</head>
+<body>
+    <h2>Zoomable Image with Mouse Scroll and Buttons</h2>
+
+    <div class="canvas-container" id="canvasContainer">
+        <!-- The image that will be zoomed inside the fixed canvas -->
+        <img src="https://plus.unsplash.com/premium_photo-1664474619075-644dd191935f?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8aW1hZ2V8ZW58MHx8MHx8fDA%3D" id="document_canvas" alt="Zoomable Image">
+        
+        <!-- Buttons for zoom control inside the canvas -->
+        <div class="zoom-buttons">
+            <button onclick="zoomIn()">Zoom In</button>
+            <button onclick="zoomOut()">Zoom Out</button>
+            <button onclick="resetZoom()">Reset</button>
+        </div>
+    </div>
+
+    <script>
+        const img = document.getElementById("document_canvas");
+        let zoomLevel = 1; // Initial zoom level
+
+        // Handle zoom on mouse wheel
+        document.getElementById("canvasContainer").addEventListener("wheel", function (e) {
+            e.preventDefault(); // Prevent page scroll while zooming
+
+            // Zoom in (scroll up) or zoom out (scroll down)
+            if (e.deltaY < 0) {
+                zoomLevel += 0.1; // Zoom in
+            } else if (e.deltaY > 0 && zoomLevel > 1) {
+                zoomLevel -= 0.1; // Zoom out
+            }
+
+            applyZoom();
+        });
+
+        // Zoom In function
+        function zoomIn() {
+            zoomLevel += 0.1; // Increase zoom level
+            applyZoom();
+        }
+
+        // Zoom Out function
+        function zoomOut() {
+            if (zoomLevel > 1) { // Don't zoom out smaller than the original size
+                zoomLevel -= 0.1;
+                applyZoom();
+            }
+        }
+
+        // Reset Zoom function
+        function resetZoom() {
+            zoomLevel = 1; // Reset zoom level to 1
+            applyZoom();
+        }
+
+        // Function to apply the zoom level and center the image
+        function applyZoom() {
+            img.style.transform = `scale(${zoomLevel})`;
+
+            // Center the image if zoomed in
+            if (zoomLevel > 1) {
+                img.style.left = `${(1 - zoomLevel) * 50}%`;
+                img.style.top = `${(1 - zoomLevel) * 50}%`;
+            } else {
+                img.style.left = '0';
+                img.style.top = '0';
+            }
+        }
+    </script>
+</body>
+</html>
