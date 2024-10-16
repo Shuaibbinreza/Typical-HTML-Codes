@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zoomable Image with Buttons</title>
+    <title>Zoomable Image with Constant Center</title>
     <style>
         /* Fixed canvas for the image */
         .canvas-container {
@@ -21,22 +21,13 @@
             height: auto;
             transition: transform 0.2s ease;
             position: absolute;
-            left: 0;
-            top: 0;
+            top: 50%;
+            left: 50%;
+            transform-origin: center center; /* Set zoom origin to center */
+            transform: translate(-50%, -50%) scale(1); /* Ensure image starts centered */
         }
 
-        /* Zoom buttons */
-        .zoom-controls {
-            margin-top: 20px;
-        }
-
-        .zoom-controls button {
-            padding: 10px;
-            font-size: 16px;
-            margin-right: 10px;
-        }
-
-        /* Positioning zoom buttons inside the canvas */
+        /* Zoom buttons inside the canvas */
         .zoom-buttons {
             position: absolute;
             bottom: 10px;
@@ -52,11 +43,11 @@
     </style>
 </head>
 <body>
-    <h2>Zoomable Image with Mouse Scroll and Buttons</h2>
+    <h2>Zoomable Image with Constant Center</h2>
 
     <div class="canvas-container" id="canvasContainer">
         <!-- The image that will be zoomed inside the fixed canvas -->
-        <img src="https://plus.unsplash.com/premium_photo-1664474619075-644dd191935f?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8aW1hZ2V8ZW58MHx8MHx8fDA%3D" id="document_canvas" alt="Zoomable Image">
+        <img src="https://images.pexels.com/photos/16292048/pexels-photo-16292048/free-photo-of-sidewalk-cafe-in-a-city-street.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" id="document_canvas" alt="Zoomable Image" style="width: 100%;">
         
         <!-- Buttons for zoom control inside the canvas -->
         <div class="zoom-buttons">
@@ -69,6 +60,8 @@
     <script>
         const img = document.getElementById("document_canvas");
         let zoomLevel = 1; // Initial zoom level
+        let posX = 50; // Initial X position percentage
+        let posY = 50; // Initial Y position percentage
 
         // Handle zoom on mouse wheel
         document.getElementById("canvasContainer").addEventListener("wheel", function (e) {
@@ -77,7 +70,7 @@
             // Zoom in (scroll up) or zoom out (scroll down)
             if (e.deltaY < 0) {
                 zoomLevel += 0.1; // Zoom in
-            } else if (e.deltaY > 0 && zoomLevel > 1) {
+            } else if (e.deltaY > 0 && zoomLevel > 0.5) { // Allow zooming out to 0.5 (50% of original size)
                 zoomLevel -= 0.1; // Zoom out
             }
 
@@ -92,7 +85,7 @@
 
         // Zoom Out function
         function zoomOut() {
-            if (zoomLevel > 1) { // Don't zoom out smaller than the original size
+            if (zoomLevel > 0.5) { // Don't zoom out smaller than 50% of the original size
                 zoomLevel -= 0.1;
                 applyZoom();
             }
@@ -100,23 +93,32 @@
 
         // Reset Zoom function
         function resetZoom() {
-            zoomLevel = 1; // Reset zoom level to 1
+            zoomLevel = 1; // Reset zoom level to 1 (original size)
+            posX = 50; // Reset position to center
+            posY = 50;
             applyZoom();
         }
 
-        // Function to apply the zoom level and center the image
+        // Function to apply the zoom level and keep the image centered
         function applyZoom() {
-            img.style.transform = `scale(${zoomLevel})`;
-
-            // Center the image if zoomed in
-            if (zoomLevel > 1) {
-                img.style.left = `${(1 - zoomLevel) * 50}%`;
-                img.style.top = `${(1 - zoomLevel) * 50}%`;
-            } else {
-                img.style.left = '0';
-                img.style.top = '0';
-            }
+            img.style.transform = `translate(-${posX}%, -${posY}%) scale(${zoomLevel})`;
         }
+
+        // Event listener for mouse move to adjust zoom origin dynamically
+        document.getElementById("canvasContainer").addEventListener("mousemove", function (e) {
+            if (zoomLevel > 1) {
+                const rect = this.getBoundingClientRect();
+                const mouseX = e.clientX - rect.left; // Get mouse X relative to the container
+                const mouseY = e.clientY - rect.top;  // Get mouse Y relative to the container
+
+                // Calculate the percentage of the mouse position relative to the container's dimensions
+                posX = (mouseX / rect.width) * 100;
+                posY = (mouseY / rect.height) * 100;
+
+                // Reapply zoom with the new position
+                applyZoom();
+            }
+        });
     </script>
 </body>
 </html>
