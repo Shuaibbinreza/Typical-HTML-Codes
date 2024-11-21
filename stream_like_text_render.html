@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text Stream Simulation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        #output {
+            font-family: monospace;
+            white-space: pre-wrap; /* Preserve spaces and line breaks */
+            background: #f4f4f4;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            max-width: 600px;
+            min-height: 100px;
+            margin-top: 20px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h1>Streaming Text Simulation</h1>
+    <p>Click the button below to stream the text:</p>
+    <button id="startButton">Start Streaming</button>
+    <div id="output"></div>
+
+    <script>
+        function streamTextToElement(text, elementId, delay) {
+            let index = 0;
+            const element = document.getElementById(elementId);
+            element.textContent = ''; // Clear previous content
+
+            function printNext() {
+                if (index < text.length) {
+                    element.textContent += text[index]; // Append the next character
+                    index++;
+                    setTimeout(printNext, delay); // Schedule the next character
+                }
+            }
+
+            printNext();
+        }
+
+        // Attach click event to the button
+        document.getElementById('startButton').addEventListener('click', () => {
+            const myString = "Lorem ipsum dolor sit amet consectetur adipisicing elit. Officia aperiam perferendis ea illum laboriosam vero sapiente optio sed praesentium, magni velit aliquid, obcaecati exercitationem quos numquam doloremque modi? Ad dolorem cupiditate laborum assumenda nobis? Eveniet quas, suscipit cupiditate quo nemo, nostrum illum nihil sunt a repellat, id accusamus ducimus fugit dolores laboriosam neque at aliquam. A veritatis consequuntur rerum necessitatibus aliquid quidem, molestiae, error illum nisi maiores atque id repellendus voluptatibus quas ullam ad enim magnam. Earum assumenda doloribus voluptas obcaecati dignissimos, odio debitis incidunt sequi enim accusamus deserunt laboriosam adipisci et voluptatibus, suscipit a praesentium ad excepturi commodi, ex tenetur quasi. Veritatis totam officia magnam numquam, veniam ullam quidem fugiat reprehenderit cupiditate deleniti aliquid itaque assumenda sapiente consectetur ducimus, cumque laboriosam! Dolore quisquam eaque quod nisi tenetur ad, suscipit cumque distinctio voluptatibus in asperiores officiis minus optio? Voluptate totam adipisci, ullam odit delectus fugit quo nemo iusto ea qui, neque hic consequuntur! Corrupti, cum. Optio excepturi sapiente expedita a at ab iusto architecto. Ad totam excepturi repellat, aperiam perspiciatis repellendus nobis animi pariatur a. Corporis porro beatae vitae vero ducimus earum ipsa! Modi totam possimus dicta non in! A assumenda iure cupiditate quidem, deserunt, dolore at blanditiis necessitatibus accusantium ad nam nesciunt? Optio odit nam ipsum excepturi fugiat iure aliquid quia error labore vitae quidem, quasi sapiente praesentium, blanditiis dolores facilis, veniam et autem eligendi? Consequuntur error non dolorem dolorum, est exercitationem reiciendis eius placeat officia hic possimus expedita, ullam impedit accusamus molestias distinctio maxime iure voluptate necessitatibus facilis earum harum aperiam? Necessitatibus eaque cum odio minima quod iusto nobis! Voluptatibus laudantium perferendis ratione blanditiis exercitationem illum! Illo ducimus id beatae fugit culpa, corporis, natus facilis quis perspiciatis soluta distinctio eligendi atque corrupti saepe sit mollitia rem optio consequuntur voluptatibus possimus unde cupiditate. Eveniet quo fuga quia iure? Dolore aut nemo, velit perferendis ex quidem accusamus. Ad debitis iste at atque, adipisci minima magni eum minus incidunt, vel perferendis dolorum expedita cum nobis culpa tempora sint, cumque molestias blanditiis. Modi est odit, alias laudantium, neque architecto corrupti officia, id dicta cupiditate ipsam a aperiam. Minima blanditiis eius, veritatis, velit eos amet nesciunt doloremque voluptatibus cupiditate optio sed! Asperiores laborum officia nam officiis similique veritatis repellendus itaque in inventore iusto. Mollitia ratione nam perferendis adipisci! Laudantium doloribus accusamus libero accusantium fuga et. Facilis, asperiores illo exercitationem neque totam aliquid quasi sapiente, voluptatibus assumenda harum pariatur! Ipsam mollitia laboriosam dicta accusamus id minima ratione. Culpa totam sunt voluptatem velit asperiores quia aliquam nesciunt quisquam esse nihil, corrupti aperiam soluta quod nisi explicabo ipsum veritatis, reiciendis at. Earum animi quae vero, illo dicta sunt id repudiandae vitae ducimus deserunt neque eum, ullam perspiciatis nemo repellendus, est temporibus. Commodi alias nemo animi sed vero similique nobis nihil veritatis quis harum sequi culpa ratione, numquam error, nulla atque expedita voluptate. Natus sapiente asperiores facilis quidem molestias accusantium optio, sit neque quas quisquam voluptate cupiditate recusandae fuga dolor animi sint, labore possimus tenetur esse. Distinctio quod asperiores eveniet atque, nihil aliquid esse voluptate adipisci qui!";
+            streamTextToElement(myString, "output", 0.0001); // Adjust delay for speed
+        });
+    </script>
+</body>
+</html>
